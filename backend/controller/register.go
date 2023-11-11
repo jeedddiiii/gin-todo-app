@@ -19,9 +19,5 @@ func Register(c *gin.Context) {
 		return
 	}
 
-	// Your logic for registration here
-	// ...
-
-	// Respond with a success message or appropriate data
 	c.JSON(200, gin.H{"Registration successful": json})
 }
