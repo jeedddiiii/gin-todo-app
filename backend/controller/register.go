@@ -20,6 +20,14 @@ func Register(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+
+	var userExists orm.User
+	orm.Db.Where("username = ?", json.Username).First(&userExists)
+	if userExists.ID > 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "User Exists"})
+		return
+	}
+
 	if json.Password != json.PasswordConfirmation {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Password and password confirmation do not match"})
 		return
