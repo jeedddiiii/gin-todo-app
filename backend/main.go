@@ -14,6 +14,7 @@ func main() {
 
 	orm.Dbconnect()
 	r.POST("/register", Controller.Register)
+	r.POST("/login", Controller.Login)
 
 	r.Run(":8080")
 
