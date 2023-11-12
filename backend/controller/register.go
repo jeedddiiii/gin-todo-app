@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"gin-todo-app/orm"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -19,9 +20,16 @@ func Register(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+	if json.Password != json.PasswordConfirmation {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Password and password confirmation do not match"})
+		return
+	}
 	encryptedPassword, _ := bcrypt.GenerateFromPassword([]byte(json.Password), 10)
-	c.JSON(200, gin.H{
-		"Registration successful": json,
-		"EncryptedPassword":       encryptedPassword,
-	})
+	user := orm.User{Username: json.Username, Password: string(encryptedPassword)}
+	orm.Db.Create(&user)
+	if user.ID > 0 {
+		c.JSON(200, gin.H{"status": "ok", "message": "User created successfully", "userId": user.ID})
+	} else {
+		c.JSON(400, gin.H{"status": "error", "message": "User created failed"})
+	}
 }
