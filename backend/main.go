@@ -10,9 +10,10 @@ import (
 
 func main() {
 	r := gin.Default()
+	r.Use(cors.Default())
+
 	orm.Dbconnect()
 	r.POST("/register", Controller.Register)
-	r.Use(cors.Default())
 
 	r.Run(":8080")
 
