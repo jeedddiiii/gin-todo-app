@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"gin-todo-app/orm"
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
@@ -32,7 +33,7 @@ func Login(c *gin.Context) {
 	}
 	err := bcrypt.CompareHashAndPassword([]byte(userExists.Password), []byte(json.Password))
 	if err == nil {
-		hmacSampleSecret = []byte("my_secret_key")
+		hmacSampleSecret = []byte(os.Getenv("JWT_SECRET_KEY"))
 		token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 			"userId": userExists.ID,
 		})
