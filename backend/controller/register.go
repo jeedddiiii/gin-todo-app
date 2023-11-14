@@ -11,7 +11,7 @@ import (
 type RegisterBody struct {
 	Username             string `json:"username" binding:"required"`
 	Password             string `json:"password" binding:"required"`
-	PasswordConfirmation string `json:"passwordcon" binding:"required"`
+	PasswordConfirmation string `json:"password_con" binding:"required"`
 }
 
 func Register(c *gin.Context) {
