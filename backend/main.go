@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	Controller "gin-todo-app/controller"
+	UserController "gin-todo-app/user"
+
 	"gin-todo-app/orm"
 
 	"github.com/gin-contrib/cors"
@@ -22,6 +24,7 @@ func main() {
 	orm.Dbconnect()
 	r.POST("/register", Controller.Register)
 	r.POST("/login", Controller.Login)
+	r.GET("/users/readall", UserController.ReadAll)
 
 	r.Run(":8080")
 
