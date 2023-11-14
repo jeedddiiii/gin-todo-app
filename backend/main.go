@@ -2,11 +2,11 @@ package main
 
 import (
 	"fmt"
-	Controller "gin-todo-app/controller"
-	"gin-todo-app/middleware"
-	UserController "gin-todo-app/user"
+	UserHandler "gin-todo-app/api/handlers"
+	Auth "gin-todo-app/internal/auth"
+	"gin-todo-app/pkg/middleware"
 
-	"gin-todo-app/orm"
+	"gin-todo-app/pkg/orm"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -23,11 +23,11 @@ func main() {
 	r.Use(cors.Default())
 
 	orm.Dbconnect()
-	r.POST("/register", Controller.Register)
-	r.POST("/login", Controller.Login)
+	r.POST("/register", Auth.Register)
+	r.POST("/login", Auth.Login)
 	authorized := r.Group("/users", middleware.JWTAuthen())
-	authorized.GET("/readall", UserController.ReadAll)
-	authorized.GET("/profile", UserController.Profile)
+	authorized.GET("/readall", UserHandler.ReadAll)
+	authorized.GET("/profile", UserHandler.Profile)
 
 	r.Run(":8080")
 

@@ -1,6 +1,7 @@
 package orm
 
 import (
+	"gin-todo-app/pkg/orm/models"
 	"os"
 
 	"gorm.io/driver/mysql"
@@ -16,11 +17,11 @@ func Dbconnect() {
 		panic("failed to connect database: " + err.Error())
 	}
 
-	if err := db.AutoMigrate(&User{}); err != nil {
+	if err := db.AutoMigrate(&models.User{}); err != nil {
 		panic("failed to auto-migrate: " + err.Error())
 	}
 
 	Db = db
 
-	db.AutoMigrate(&User{})
+	db.AutoMigrate(&models.User{})
 }

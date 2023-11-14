@@ -1,7 +1,9 @@
-package controller
+package auth
 
 import (
-	"gin-todo-app/orm"
+	"gin-todo-app/pkg/orm"
+
+	"gin-todo-app/pkg/orm/models"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -21,7 +23,7 @@ func Register(c *gin.Context) {
 		return
 	}
 
-	var userExists orm.User
+	var userExists models.User
 	orm.Db.Where("username = ?", json.Username).First(&userExists)
 	if userExists.ID > 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "User Exists"})
@@ -33,7 +35,7 @@ func Register(c *gin.Context) {
 		return
 	}
 	encryptedPassword, _ := bcrypt.GenerateFromPassword([]byte(json.Password), 10)
-	user := orm.User{Username: json.Username, Password: string(encryptedPassword)}
+	user := models.User{Username: json.Username, Password: string(encryptedPassword)}
 	orm.Db.Create(&user)
 	if user.ID > 0 {
 		c.JSON(200, gin.H{"status": "ok", "message": "User created successfully", "userId": user.ID})

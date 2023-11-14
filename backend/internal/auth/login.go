@@ -1,16 +1,17 @@
-package controller
+package auth
 
 import (
 	"fmt"
-	"gin-todo-app/orm"
 	"net/http"
 	"os"
-
 	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
+
+	"gin-todo-app/pkg/orm"
+	"gin-todo-app/pkg/orm/models"
 )
 
 var hmacSampleSecret []byte
@@ -27,7 +28,7 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	var userExists orm.User
+	var userExists models.User
 	orm.Db.Where("username = ?", json.Username).First(&userExists)
 	if userExists.ID == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "User does not exist"})
