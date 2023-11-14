@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	Controller "gin-todo-app/controller"
+	"gin-todo-app/middleware"
 	UserController "gin-todo-app/user"
 
 	"gin-todo-app/orm"
@@ -24,7 +25,9 @@ func main() {
 	orm.Dbconnect()
 	r.POST("/register", Controller.Register)
 	r.POST("/login", Controller.Login)
-	r.GET("/users/readall", UserController.ReadAll)
+	authorized := r.Group("/users", middleware.JWTAuthen())
+	authorized.GET("/readall", UserController.ReadAll)
+	authorized.GET("/profile", UserController.Profile)
 
 	r.Run(":8080")
 

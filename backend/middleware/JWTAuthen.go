@@ -9,7 +9,7 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-func Logger() gin.HandlerFunc {
+func JWTAuthen() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		hmacSampleSecret := []byte(os.Getenv("JWT_SECRET_KEY"))
 		header := c.Request.Header.Get("Authorization")
@@ -25,8 +25,7 @@ func Logger() gin.HandlerFunc {
 		if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 			c.Set("userId", claims["userId"])
 		} else {
-			c.JSON(404, gin.H{"status": "error", "message": err.Error()})
-			return
+			c.AbortWithStatusJSON(404, gin.H{"status": "forbidden", "message": err.Error()})
 		}
 
 		c.Next()

@@ -13,3 +13,10 @@ func ReadAll(c *gin.Context) {
 	c.JSON(200, gin.H{"status": "ok", "message": "User read successs", "users": users})
 
 }
+func Profile(c *gin.Context) {
+	userId := c.MustGet("userId").(float64)
+	var user []orm.User
+	orm.Db.First(&user, userId)
+	c.JSON(200, gin.H{"status": "ok", "message": "User read successs", "users": user})
+
+}
